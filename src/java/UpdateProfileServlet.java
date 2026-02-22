@@ -11,7 +11,6 @@ public class UpdateProfileServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // disable cache
         response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
         response.setHeader("Pragma", "no-cache");
         response.setDateHeader("Expires", 0);
@@ -43,7 +42,6 @@ public class UpdateProfileServlet extends HttpServlet {
                 ps.executeUpdate();
             }
 
-            // ✅ update session immediately
             session.setAttribute("userName", name);
             session.setAttribute("userEmail", email);
             session.setAttribute("bio", bio);
@@ -63,9 +61,6 @@ public class UpdateProfileServlet extends HttpServlet {
         }
     }
 
-    // ==========================
-    // Render DB connection
-    // ==========================
     private Connection getConnection() throws Exception {
         String url = "jdbc:mysql://" +
                 System.getenv("DB_HOST") + ":" +

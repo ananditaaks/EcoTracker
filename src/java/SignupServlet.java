@@ -21,7 +21,7 @@ public class SignupServlet extends HttpServlet {
         String password = request.getParameter("password");
         String confirmPassword = request.getParameter("confirmPassword");
 
-        // ===== Validation =====
+
         if (name == null || email == null || password == null || confirmPassword == null ||
             name.trim().isEmpty() || email.trim().isEmpty() ||
             password.trim().isEmpty() || confirmPassword.trim().isEmpty()) {
@@ -37,18 +37,18 @@ public class SignupServlet extends HttpServlet {
 
         try (Connection con = getConnection()) {
 
-            // ===== Insert user =====
+
             String insertSql =
                 "INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, 'user')";
 
             PreparedStatement ps = con.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, name);
             ps.setString(2, email);
-            ps.setString(3, password); // (hash later)
+            ps.setString(3, password); 
 
             ps.executeUpdate();
 
-            // ===== Get inserted user id =====
+
             ResultSet rs = ps.getGeneratedKeys();
             if (rs.next()) {
 
@@ -58,7 +58,7 @@ public class SignupServlet extends HttpServlet {
                 session.setAttribute("userEmail", email);
                 session.setAttribute("userRole", "user");
 
-                // cache disable
+
                 response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
                 response.setHeader("Pragma", "no-cache");
                 response.setDateHeader("Expires", 0);
@@ -69,7 +69,7 @@ public class SignupServlet extends HttpServlet {
             }
 
         } catch (SQLIntegrityConstraintViolationException e) {
-            // duplicate email
+    
             response.sendRedirect("Signup_Form.jsp?error=exists");
 
         } catch (Exception e) {
@@ -78,7 +78,6 @@ public class SignupServlet extends HttpServlet {
         }
     }
 
-    // ===== Railway DB Connection =====
     private Connection getConnection() throws Exception {
 
         String host = System.getenv("DB_HOST");

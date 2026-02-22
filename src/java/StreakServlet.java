@@ -13,7 +13,7 @@ public class StreakServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // Disable cache (back button issue fix)
+
         response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
         response.setHeader("Pragma", "no-cache");
         response.setDateHeader("Expires", 0);
@@ -52,9 +52,7 @@ public class StreakServlet extends HttpServlet {
             e.printStackTrace();
         }
 
-        // ======================
-        // Streak calculations
-        // ======================
+
         int totalDays = loggedDates.size();
         int currentStreak = 0;
         int longestStreak = 0;
@@ -79,16 +77,13 @@ public class StreakServlet extends HttpServlet {
         }
         longestStreak = Math.max(longestStreak, tempStreak);
 
-        // Current streak (backward from today)
         LocalDate cursor = today;
         while (loggedDates.contains(cursor)) {
             currentStreak++;
             cursor = cursor.minusDays(1);
         }
 
-        // ======================
-        // Calendar (last 35 days)
-        // ======================
+
         List<Map<String, Object>> calendarDays = new ArrayList<>();
 
         for (int i = 34; i >= 0; i--) {
@@ -102,9 +97,7 @@ public class StreakServlet extends HttpServlet {
             calendarDays.add(day);
         }
 
-        // ======================
-        // Achievements
-        // ======================
+
         Map<String, Boolean> achievements = new LinkedHashMap<>();
         achievements.put("Week Warrior", currentStreak >= 7);
         achievements.put("Fortnight Fighter", currentStreak >= 14);
@@ -112,9 +105,7 @@ public class StreakServlet extends HttpServlet {
         achievements.put("Century Champion", currentStreak >= 100);
         achievements.put("Year Legend", currentStreak >= 365);
 
-        // ======================
-        // Send to JSP
-        // ======================
+
         request.setAttribute("currentStreak", currentStreak);
         request.setAttribute("longestStreak", longestStreak);
         request.setAttribute("totalDays", totalDays);
@@ -125,9 +116,7 @@ public class StreakServlet extends HttpServlet {
         request.getRequestDispatcher("streak.jsp").forward(request, response);
     }
 
-    // ======================
-    // Render DB connection
-    // ======================
+
     private Connection getConnection() throws Exception {
         String url = "jdbc:mysql://" +
                 System.getenv("DB_HOST") + ":" +

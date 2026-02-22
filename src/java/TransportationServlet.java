@@ -11,7 +11,7 @@ public class TransportationServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // Disable cache
+
         response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
         response.setHeader("Pragma", "no-cache");
         response.setDateHeader("Expires", 0);
@@ -77,9 +77,6 @@ public class TransportationServlet extends HttpServlet {
         request.getRequestDispatcher("Transportation.jsp").forward(request, response);
     }
 
-    // =========================
-    // Render DB connection
-    // =========================
     private Connection getConnection() throws Exception {
         String url = "jdbc:mysql://" +
                 System.getenv("DB_HOST") + ":" +

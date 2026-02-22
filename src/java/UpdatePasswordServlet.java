@@ -11,7 +11,7 @@ public class UpdatePasswordServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // Disable cache
+      
         response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
         response.setHeader("Pragma", "no-cache");
         response.setDateHeader("Expires", 0);
@@ -37,7 +37,7 @@ public class UpdatePasswordServlet extends HttpServlet {
 
         try (Connection con = getConnection()) {
 
-            // 1️⃣ Verify current password
+
             String checkSql = "SELECT password FROM users WHERE id = ?";
             try (PreparedStatement checkPs = con.prepareStatement(checkSql)) {
                 checkPs.setInt(1, userId);
@@ -51,7 +51,7 @@ public class UpdatePasswordServlet extends HttpServlet {
                 }
             }
 
-            // 2️⃣ Update password
+
             String updateSql = "UPDATE users SET password = ? WHERE id = ?";
             try (PreparedStatement ps = con.prepareStatement(updateSql)) {
                 ps.setString(1, newPassword);
@@ -69,9 +69,6 @@ public class UpdatePasswordServlet extends HttpServlet {
         }
     }
 
-    // =========================
-    // Render DB connection
-    // =========================
     private Connection getConnection() throws Exception {
         String url = "jdbc:mysql://" +
                 System.getenv("DB_HOST") + ":" +

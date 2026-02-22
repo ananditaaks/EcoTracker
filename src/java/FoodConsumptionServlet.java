@@ -17,7 +17,6 @@ public class FoodConsumptionServlet extends HttpServlet {
             return;
         }
 
-        // 🔒 Prevent cache (important)
         response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
         response.setHeader("Pragma", "no-cache");
         response.setDateHeader("Expires", 0);
@@ -65,7 +64,7 @@ public class FoodConsumptionServlet extends HttpServlet {
             throw new ServletException("Food consumption save failed", e);
         }
 
-        // ================= MESSAGE LOGIC =================
+
         double standard = "daily".equals(routine) ? 7.0 : 200.0;
 
         String message =
@@ -80,7 +79,6 @@ public class FoodConsumptionServlet extends HttpServlet {
         request.getRequestDispatcher("Food.jsp").forward(request, response);
     }
 
-    /* ================= FOOD EMISSION FACTORS ================= */
     private double getFoodEmissionFactor(String food) {
         switch (food) {
             case "Rice / Wheat (Staples)": return 1.2;
@@ -98,7 +96,6 @@ public class FoodConsumptionServlet extends HttpServlet {
         }
     }
 
-    /* ================= DB CONNECTION (Render ready) ================= */
     private Connection getConnection() throws Exception {
 
         String url = "jdbc:mysql://" +

@@ -42,7 +42,7 @@ public class LoginServlet extends HttpServlet {
                 session.setAttribute("location", rs.getString("location"));
                 session.setAttribute("profilePhoto", rs.getString("profile_photo"));
 
-                // 🔒 Prevent back-button cache issue
+
                 response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
                 response.setHeader("Pragma", "no-cache");
                 response.setDateHeader("Expires", 0);
@@ -58,7 +58,6 @@ public class LoginServlet extends HttpServlet {
         }
     }
 
-    // 🔑 Render / Docker compatible DB connection
     private Connection getConnection() throws Exception {
         String url = "jdbc:mysql://" +
                 System.getenv("DB_HOST") + ":" +

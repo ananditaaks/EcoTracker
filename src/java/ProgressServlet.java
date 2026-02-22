@@ -11,7 +11,7 @@ public class ProgressServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // 🔒 Session check
+        
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("userId") == null) {
             response.sendRedirect("Login_Form.jsp");
@@ -41,14 +41,14 @@ public class ProgressServlet extends HttpServlet {
                 "WHERE user_id=? AND MONTH(created_at)=MONTH(CURDATE()) AND YEAR(created_at)=YEAR(CURDATE())",
                 userId);
 
-            // ===== Tracking days =====
+       
             PreparedStatement ps1 = con.prepareStatement(
                 "SELECT COUNT(DISTINCT DATE(created_at)) FROM transportation_logs WHERE user_id=?");
             ps1.setInt(1, userId);
             ResultSet rs1 = ps1.executeQuery();
             if (rs1.next()) trackingDays = rs1.getInt(1);
 
-            // ===== Transport count =====
+
             PreparedStatement ps2 = con.prepareStatement(
                 "SELECT COUNT(*) FROM transportation_logs WHERE user_id=?");
             ps2.setInt(1, userId);
@@ -59,7 +59,7 @@ public class ProgressServlet extends HttpServlet {
             e.printStackTrace();
         }
 
-        // ===== Calculations =====
+
         double total = transport + food + energy;
         double monthlyAverage = total / 30.0;
         double weeklyAverage = total / 4.0;
@@ -70,15 +70,14 @@ public class ProgressServlet extends HttpServlet {
 
         int treesEquivalent = (int) Math.ceil(total / 20);
         double savedMoney = energy * 6.5;
-        double reductionPercent = 15.0; // placeholder
+        double reductionPercent = 15.0; // 
 
-        // ===== Milestones =====
+
         boolean weekComplete = trackingDays >= 7;
         boolean ecoBeginner = reductionPercent >= 10;
         boolean greenCommuter = transportCount >= 10;
         boolean sustainabilityChampion = reductionPercent >= 25;
 
-        // ===== JSP attributes =====
         request.setAttribute("totalEmissions", total);
         request.setAttribute("monthlyAverage", monthlyAverage);
         request.setAttribute("weeklyAverage", weeklyAverage);
@@ -103,7 +102,7 @@ public class ProgressServlet extends HttpServlet {
         request.setAttribute("trackingDays", trackingDays);
         request.setAttribute("transportCount", transportCount);
 
-        // ===== Chart.js dummy data =====
+
         request.setAttribute("dailyLabels",
             "['Mon','Tue','Wed','Thu','Fri','Sat','Sun']");
         request.setAttribute("dailyValues",
@@ -120,7 +119,7 @@ public class ProgressServlet extends HttpServlet {
         request.getRequestDispatcher("progress.jsp").forward(request, response);
     }
 
-    // 🔗 Render DB connection
+
     private Connection getConnection() throws Exception {
         String url = "jdbc:mysql://" +
                 System.getenv("DB_HOST") + ":" +

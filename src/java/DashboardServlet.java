@@ -32,22 +32,22 @@ public class DashboardServlet extends HttpServlet {
 
         try (Connection con = getConnection()) {
 
-            /* ================= TRANSPORT ================= */
+         
             transportEmissions = getSingleValue(con,
                 "SELECT IFNULL(SUM(emission_kg),0) FROM transportation_logs WHERE user_id=?",
                 userId);
 
-            /* ================= FOOD ================= */
+
             foodEmissions = getSingleValue(con,
                 "SELECT IFNULL(SUM(emission_kg),0) FROM food_consumption_logs WHERE user_id=?",
                 userId);
 
-            /* ================= ENERGY ================= */
+
             energyEmissions = getSingleValue(con,
                 "SELECT IFNULL(SUM(emission),0) FROM energy_consumption WHERE user_id=?",
                 userId);
 
-            /* ================= LAST 7 DAYS ================= */
+
             String dailySql =
                 "SELECT DATE(created_at) d, " +
                 "(SUM(t.emission_kg) + " +
@@ -68,7 +68,7 @@ public class DashboardServlet extends HttpServlet {
                 last7DaysData.add(rsDaily.getDouble("total"));
             }
 
-            /* ================= LAST 6 MONTHS ================= */
+
             String monthlySql =
                 "SELECT DATE_FORMAT(created_at,'%b %Y') m, SUM(total) total FROM ( " +
                 " SELECT created_at, emission_kg total FROM transportation_logs WHERE user_id=? " +
@@ -97,7 +97,7 @@ public class DashboardServlet extends HttpServlet {
         double dailyAvg = totalEmissions / 7.0;
         double monthlyAvg = totalEmissions / 30.0;
 
-        /* ================= JSP ATTRIBUTES ================= */
+
         request.setAttribute("transportEmissions", transportEmissions);
         request.setAttribute("foodEmissions", foodEmissions);
         request.setAttribute("energyEmissions", energyEmissions);
@@ -111,7 +111,6 @@ public class DashboardServlet extends HttpServlet {
         request.setAttribute("last6MonthsData", last6MonthsData);
         request.setAttribute("last6MonthsLabels", last6MonthsLabels);
 
-        // 🔒 Cache disable (logout/back button fix)
         response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
         response.setHeader("Pragma", "no-cache");
         response.setDateHeader("Expires", 0);
@@ -119,7 +118,6 @@ public class DashboardServlet extends HttpServlet {
         request.getRequestDispatcher("dashboard.jsp").forward(request, response);
     }
 
-    /* ================= DB CONNECTION (Render ready) ================= */
     private Connection getConnection() throws Exception {
 
         String url = "jdbc:mysql://" +

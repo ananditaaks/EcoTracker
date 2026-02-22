@@ -44,22 +44,19 @@ public class UpdateProfilePhotoServlet extends HttpServlet {
             return;
         }
 
-        // ===== file name =====
         String original = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
         String ext = original.substring(original.lastIndexOf("."));
         String newFileName = "user_" + userId + ext;
 
-        // ===== upload path =====
         String uploadPath = getServletContext().getRealPath("/") + File.separator + UPLOAD_DIR;
         File uploadDir = new File(uploadPath);
         if (!uploadDir.exists()) uploadDir.mkdirs();
 
-        // ===== save file (ONLY ONCE) =====
+
         filePart.write(uploadPath + File.separator + newFileName);
 
         String dbPath = UPLOAD_DIR + "/" + newFileName;
 
-        // ===== DB update =====
         try (Connection con = getConnection()) {
 
             String sql = "UPDATE users SET profile_photo=? WHERE id=?";
@@ -69,7 +66,7 @@ public class UpdateProfilePhotoServlet extends HttpServlet {
                 ps.executeUpdate();
             }
 
-            // update session
+      
             session.setAttribute("profilePhoto", dbPath);
 
             request.setAttribute("successMessage", "Profile photo updated successfully");
@@ -82,9 +79,7 @@ public class UpdateProfilePhotoServlet extends HttpServlet {
         }
     }
 
-    // ==========================
-    // Render DB connection
-    // ==========================
+
     private Connection getConnection() throws Exception {
         String url = "jdbc:mysql://" +
                 System.getenv("DB_HOST") + ":" +

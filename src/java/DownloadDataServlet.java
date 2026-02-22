@@ -20,7 +20,7 @@ public class DownloadDataServlet extends HttpServlet {
 
         int userId = (int) session.getAttribute("userId");
 
-        // 🔒 Prevent caching
+
         response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
         response.setHeader("Pragma", "no-cache");
         response.setDateHeader("Expires", 0);
@@ -36,7 +36,7 @@ public class DownloadDataServlet extends HttpServlet {
             PrintWriter out = response.getWriter()
         ) {
 
-            /* ================= USER PROFILE ================= */
+        
             out.println("USER PROFILE");
             out.println("Name,Email,Bio,Location");
 
@@ -54,7 +54,7 @@ public class DownloadDataServlet extends HttpServlet {
                         rs.getString("location"));
             }
 
-            /* ================= TRANSPORT ================= */
+  
             out.println();
             out.println("TRANSPORTATION LOGS");
             out.println("Mode,Distance,Emission,Date");
@@ -64,7 +64,7 @@ public class DownloadDataServlet extends HttpServlet {
                 "FROM transportation_logs WHERE user_id=?",
                 userId);
 
-            /* ================= FOOD ================= */
+
             out.println();
             out.println("FOOD CONSUMPTION LOGS");
             out.println("Food Type,Quantity,Emission,Date");
@@ -74,7 +74,7 @@ public class DownloadDataServlet extends HttpServlet {
                 "FROM food_consumption_logs WHERE user_id=?",
                 userId);
 
-            /* ================= ENERGY ================= */
+
             out.println();
             out.println("ENERGY CONSUMPTION LOGS");
             out.println("Source,Units,Emission,Date");
@@ -89,7 +89,6 @@ public class DownloadDataServlet extends HttpServlet {
         }
     }
 
-    /* ================= HELPER METHOD ================= */
     private void dumpTable(PrintWriter out, Connection con, String sql, int userId)
             throws SQLException {
 
@@ -108,7 +107,7 @@ public class DownloadDataServlet extends HttpServlet {
         }
     }
 
-    /* ================= DB CONNECTION (Render ready) ================= */
+
     private Connection getConnection() throws Exception {
 
         String url = "jdbc:mysql://" +

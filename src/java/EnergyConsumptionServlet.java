@@ -17,7 +17,7 @@ public class EnergyConsumptionServlet extends HttpServlet {
             return;
         }
 
-        // 🔒 Prevent cache
+
         response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
         response.setHeader("Pragma", "no-cache");
         response.setDateHeader("Expires", 0);
@@ -65,7 +65,7 @@ public class EnergyConsumptionServlet extends HttpServlet {
             throw new ServletException("Energy consumption save failed", e);
         }
 
-        // ================= MESSAGE LOGIC =================
+
         String message;
         if (totalEmission > 8.0) {
             message =
@@ -81,7 +81,6 @@ public class EnergyConsumptionServlet extends HttpServlet {
         request.getRequestDispatcher("Energy.jsp").forward(request, response);
     }
 
-    /* ================= EMISSION FACTOR ================= */
     private double getEmissionFactor(String type) {
         switch (type) {
             case "Electricity (Grid)": return 0.82;
@@ -93,7 +92,7 @@ public class EnergyConsumptionServlet extends HttpServlet {
         }
     }
 
-    /* ================= DB CONNECTION (Render ready) ================= */
+
     private Connection getConnection() throws Exception {
 
         String url = "jdbc:mysql://" +

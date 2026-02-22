@@ -43,7 +43,7 @@ public class DeleteAccountServlet extends HttpServlet {
 
             session.invalidate();
 
-            // 🔒 cache disable
+       
             response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
             response.setHeader("Pragma", "no-cache");
             response.setDateHeader("Expires", 0);
@@ -68,7 +68,7 @@ public class DeleteAccountServlet extends HttpServlet {
         }
     }
 
-    /* ================= DB CONNECTION (Render ready) ================= */
+
     private Connection getConnection() throws Exception {
 
         String url = "jdbc:mysql://" +

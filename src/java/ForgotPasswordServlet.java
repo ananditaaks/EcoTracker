@@ -13,7 +13,7 @@ public class ForgotPasswordServlet extends HttpServlet {
 
         request.setCharacterEncoding("UTF-8");
 
-        // 🔒 Prevent cache
+
         response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
         response.setHeader("Pragma", "no-cache");
         response.setDateHeader("Expires", 0);
@@ -22,7 +22,7 @@ public class ForgotPasswordServlet extends HttpServlet {
         String newPassword = request.getParameter("newPassword");
         String confirmPassword = request.getParameter("confirmPassword");
 
-        // ================= BASIC VALIDATION =================
+
         if (email == null || newPassword == null || confirmPassword == null ||
             email.trim().isEmpty() ||
             newPassword.trim().isEmpty() ||
@@ -37,10 +37,8 @@ public class ForgotPasswordServlet extends HttpServlet {
             return;
         }
 
-        // ================= DB OPERATION =================
         try (Connection con = getConnection()) {
 
-            // 1️⃣ Check email exists
             String checkSql = "SELECT id FROM users WHERE email=?";
             try (PreparedStatement psCheck = con.prepareStatement(checkSql)) {
 
@@ -53,16 +51,14 @@ public class ForgotPasswordServlet extends HttpServlet {
                 }
             }
 
-            // 2️⃣ Update password
             String updateSql = "UPDATE users SET password=? WHERE email=?";
             try (PreparedStatement psUpdate = con.prepareStatement(updateSql)) {
 
-                psUpdate.setString(1, newPassword); // 🔐 hashing optional
+                psUpdate.setString(1, newPassword);
                 psUpdate.setString(2, email);
                 psUpdate.executeUpdate();
             }
 
-            // ✅ Success → Login
             response.sendRedirect("Login_Form.jsp?reset=success");
 
         } catch (Exception e) {
@@ -71,7 +67,6 @@ public class ForgotPasswordServlet extends HttpServlet {
         }
     }
 
-    /* ================= DB CONNECTION (Render compatible) ================= */
     private Connection getConnection() throws Exception {
 
         String url = "jdbc:mysql://" +
